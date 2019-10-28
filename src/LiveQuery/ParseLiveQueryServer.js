@@ -206,11 +206,9 @@ class ParseLiveQueryServer {
     const currentParseObject = message.currentParseObject.toJSON();
     const className = currentParseObject.className;
     logger.verbose(
-      'ClassName: %s | ObjectId: %s',
-      className,
-      currentParseObject.id
+      `ClassName: ${className} | ObjectId: ${currentParseObject.id}`,
     );
-    logger.verbose('Current client number : %d', this.clients.size);
+    logger.verbose(`Current client number : ${this.clients.size}`, this.clients.size);
 
     const classSubscriptions = this.subscriptions.get(className);
     if (typeof classSubscriptions === 'undefined') {
@@ -219,11 +217,11 @@ class ParseLiveQueryServer {
     }
 
     const subscritionCount = classSubscriptions.values().length
-    logger.debug(`Subscription count: ${subscritionCount}`)
+    logger.verbose(`Subscription count: ${subscritionCount}`)
 
     for (const subscription of classSubscriptions.values()) {
       const start = new Date()
-      logger.debug(`Evaluating subscription: ${subscription}`)
+      logger.verbose(`Evaluating subscription: ${subscription}`)
 
       const isOriginalSubscriptionMatched = this._matchesSubscription(
         originalParseObject,
@@ -327,7 +325,7 @@ class ParseLiveQueryServer {
       }
       const end = new Date()
       const diff = end.getTime() - start.getTime()
-      logger.debug(`Finish evaluating subscription in ${diff} milliseconds}`)
+      logger.verbose(`Finish evaluating subscription in ${diff} milliseconds}`)
     }
   }
 
