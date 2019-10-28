@@ -216,12 +216,11 @@ class ParseLiveQueryServer {
       return;
     }
 
-    const subscritionCount = classSubscriptions.values().length
-    logger.verbose(`Subscription count: ${subscritionCount}`)
+    logger.verbose(`Subscription count: ${classSubscriptions ? classSubscriptions.size : 0}`)
 
     for (const subscription of classSubscriptions.values()) {
       const start = new Date()
-      logger.verbose(`Evaluating subscription: ${subscription}`)
+      logger.verbose(`Evaluating subscription: ${JSON.stringify(subscription.query)}`)
 
       const isOriginalSubscriptionMatched = this._matchesSubscription(
         originalParseObject,
@@ -325,7 +324,7 @@ class ParseLiveQueryServer {
       }
       const end = new Date()
       const diff = end.getTime() - start.getTime()
-      logger.verbose(`Finish evaluating subscription in ${diff} milliseconds}`)
+      logger.verbose(`Finish evaluating subscription in ${diff} milliseconds`)
     }
   }
 
