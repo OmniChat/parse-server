@@ -3,12 +3,19 @@ import logger from '../logger';
 import type { FlattenedObjectData } from './Subscription';
 export type Message = { [attr: string]: any };
 
-const dafaultFields = ['className', 'objectId', 'updatedAt', 'createdAt', 'ACL'];
+const dafaultFields = [
+  'className',
+  'objectId',
+  'updatedAt',
+  'createdAt',
+  'ACL',
+];
 
 class Client {
   id: number;
   parseWebSocket: any;
   hasMasterKey: boolean;
+  sessionToken: string;
   userId: string;
   roles: Array<string>;
   subscriptionInfos: Object;
@@ -21,10 +28,16 @@ class Client {
   pushDelete: Function;
   pushLeave: Function;
 
-  constructor(id: number, parseWebSocket: any, hasMasterKey: boolean) {
+  constructor(
+    id: number,
+    parseWebSocket: any,
+    hasMasterKey: boolean = false,
+    sessionToken: string
+  ) {
     this.id = id;
     this.parseWebSocket = parseWebSocket;
     this.hasMasterKey = hasMasterKey;
+    this.sessionToken = sessionToken;
     this.roles = [];
     this.subscriptionInfos = new Map();
     this.pushConnect = this._pushEvent('connected');
@@ -42,13 +55,21 @@ class Client {
     parseWebSocket.send(message);
   }
 
-  static pushError(parseWebSocket: any, code: number, error: string, reconnect: boolean = true): void {
-    Client.pushResponse(parseWebSocket, JSON.stringify({
-      'op': 'error',
-      'error': error,
-      'code': code,
-      'reconnect': reconnect
-    }));
+  static pushError(
+    parseWebSocket: any,
+    code: number,
+    error: string,
+    reconnect: boolean = true
+  ): void {
+    Client.pushResponse(
+      parseWebSocket,
+      JSON.stringify({
+        op: 'error',
+        error: error,
+        code: code,
+        reconnect: reconnect,
+      })
+    );
   }
 
   addSubscriptionInfo(requestId: number, subscriptionInfo: any): void {
@@ -64,10 +85,14 @@ class Client {
   }
 
   _pushEvent(type: string): Function {
-    return function(subscriptionId: number, parseObjectJSON: any): void {
+    return function(
+      subscriptionId: number,
+      parseObjectJSON: any,
+      parseOriginalObjectJSON: any
+    ): void {
       const response: Message = {
-        'op' : type,
-        'clientId' : this.id
+        op: type,
+        clientId: this.id,
       };
       if (typeof subscriptionId !== 'undefined') {
         response['requestId'] = subscriptionId;
@@ -78,9 +103,15 @@ class Client {
           fields = this.subscriptionInfos.get(subscriptionId).fields;
         }
         response['object'] = this._toJSONWithFields(parseObjectJSON, fields);
+        if (parseOriginalObjectJSON) {
+          response['original'] = this._toJSONWithFields(
+            parseOriginalObjectJSON,
+            fields
+          );
+        }
       }
       Client.pushResponse(this.parseWebSocket, JSON.stringify(response));
-    }
+    };
   }
 
   _toJSONWithFields(parseObjectJSON: any, fields: any): FlattenedObjectData {
@@ -100,6 +131,4 @@ class Client {
   }
 }
 
-export {
-  Client
-}
+export { Client };

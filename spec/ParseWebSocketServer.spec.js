@@ -1,7 +1,8 @@
-const ParseWebSocketServer = require('../lib/LiveQuery/ParseWebSocketServer').ParseWebSocketServer;
+const {
+  ParseWebSocketServer,
+} = require('../lib/LiveQuery/ParseWebSocketServer');
 
 describe('ParseWebSocketServer', function() {
-
   beforeEach(function(done) {
     // Mock ws server
     const EventEmitter = require('events');
@@ -16,13 +17,17 @@ describe('ParseWebSocketServer', function() {
     const onConnectCallback = jasmine.createSpy('onConnectCallback');
     const http = require('http');
     const server = http.createServer();
-    const parseWebSocketServer = new ParseWebSocketServer(server, onConnectCallback, 5).server;
+    const parseWebSocketServer = new ParseWebSocketServer(
+      server,
+      onConnectCallback,
+      { websocketTimeout: 5 }
+    ).server;
     const ws = {
       readyState: 0,
       OPEN: 0,
-      ping: jasmine.createSpy('ping')
+      ping: jasmine.createSpy('ping'),
     };
-    parseWebSocketServer.emit('connection', ws);
+    parseWebSocketServer.onConnection(ws);
 
     // Make sure callback is called
     expect(onConnectCallback).toHaveBeenCalled();
@@ -31,10 +36,10 @@ describe('ParseWebSocketServer', function() {
       expect(ws.ping).toHaveBeenCalled();
       server.close();
       done();
-    }, 10)
+    }, 10);
   });
 
-  afterEach(function(){
+  afterEach(function() {
     jasmine.restoreLibrary('ws', 'Server');
   });
 });
