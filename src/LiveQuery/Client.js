@@ -1,7 +1,11 @@
 import logger from '../logger';
 
-import type { FlattenedObjectData } from './Subscription';
-export type Message = { [attr: string]: any };
+import type {
+  FlattenedObjectData
+} from './Subscription';
+export type Message = {
+  [attr: string]: any
+};
 
 const dafaultFields = [
   'className',
@@ -17,7 +21,7 @@ class Client {
   hasMasterKey: boolean;
   sessionToken: string;
   userId: string;
-  roles: Array<string>;
+  roles: Array < string > ;
   subscriptionInfos: Object;
   pushConnect: Function;
   pushSubscribe: Function;
@@ -51,7 +55,7 @@ class Client {
   }
 
   static pushResponse(parseWebSocket: any, message: Message): void {
-    logger.verbose('Push Response : %j', message);
+    logger.verbose(`Push Response : ${message}`);
     parseWebSocket.send(message);
   }
 
@@ -131,4 +135,6 @@ class Client {
   }
 }
 
-export { Client };
+export {
+  Client
+};
