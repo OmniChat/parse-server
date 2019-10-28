@@ -327,7 +327,7 @@ class ParseLiveQueryServer {
       }
       const end = new Date()
       const diff = end.getTime() - start.getTime()
-      logger.debug(`Finish evaluating subscription in ${diff.getMilliseconds()} milliseconds}`)
+      logger.debug(`Finish evaluating subscription in ${diff} milliseconds}`)
     }
   }
 
