@@ -89,7 +89,7 @@ class ParseLiveQueryServer {
     // Register message handler for subscriber. When publisher get messages, it will publish message
     // to the subscribers and the handler will be called.
     this.subscriber.on('message', (channel, messageStr) => {
-      logger.verbose('Subscribe messsage %j', messageStr);
+      logger.verbose(`Subscribe messsage ${messageStr}`);
       let message;
       try {
         message = JSON.parse(messageStr);
@@ -141,11 +141,7 @@ class ParseLiveQueryServer {
     const deletedParseObject = message.currentParseObject.toJSON();
     const classLevelPermissions = message.classLevelPermissions;
     const className = deletedParseObject.className;
-    logger.verbose(
-      'ClassName: %j | ObjectId: %s',
-      className,
-      deletedParseObject.id
-    );
+    logger.verbose(`ClassName: ${className} | ObjectId: ${deletedParseObject.id}`);
     logger.verbose('Current client number : %d', this.clients.size);
 
     const classSubscriptions = this.subscriptions.get(className);
@@ -345,7 +341,7 @@ class ParseLiveQueryServer {
           return;
         }
       }
-      logger.verbose('Request: %j', request);
+      logger.verbose(`Request: ${request}`);
 
       // Check whether this request is a valid request, return error directly if not
       if (
@@ -414,8 +410,8 @@ class ParseLiveQueryServer {
         }
       }
 
-      logger.verbose('Current clients %d', this.clients.size);
-      logger.verbose('Current subscriptions %d', this.subscriptions.size);
+      logger.verbose(`Current clients ${this.clients.size}`);
+      logger.verbose(`Current subscriptions ${this.subscriptions.size}`);
       runLiveQueryEventHandlers({
         event: 'ws_disconnect',
         clients: this.clients.size,
