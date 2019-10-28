@@ -221,7 +221,14 @@ class ParseLiveQueryServer {
       logger.debug('Can not find subscriptions under this class ' + className);
       return;
     }
+
+    const subscritionCount = classSubscriptions.values().length
+    logger.debug(`Subscription count: ${subscritionCount}`)
+
     for (const subscription of classSubscriptions.values()) {
+      const start = new Date()
+      logger.debug(`Evaluating subscription: ${subscription}`)
+
       const isOriginalSubscriptionMatched = this._matchesSubscription(
         originalParseObject,
         subscription
@@ -322,6 +329,9 @@ class ParseLiveQueryServer {
             );
         }
       }
+      const end = new Date()
+      const diff = end.getTime() - start.getTime()
+      logger.debug(`Finish evaluating subscription in ${diff.getMilliseconds()} milliseconds}`)
     }
   }
 
