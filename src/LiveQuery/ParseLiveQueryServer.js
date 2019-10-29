@@ -206,9 +206,9 @@ class ParseLiveQueryServer {
     const currentParseObject = message.currentParseObject.toJSON();
     const className = currentParseObject.className;
     logger.verbose(
-      `ClassName: ${className} | ObjectId: ${currentParseObject.id}`,
+      `ClassName: ${className} | ObjectId: ${currentParseObject.objectId}`,
     );
-    logger.verbose(`Current client number : ${this.clients.size}`, this.clients.size);
+    logger.verbose(`Current client number : ${this.clients.size}`);
 
     const classSubscriptions = this.subscriptions.get(className);
     if (typeof classSubscriptions === 'undefined') {
