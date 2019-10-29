@@ -220,7 +220,7 @@ class ParseLiveQueryServer {
 
     for (const subscription of classSubscriptions.values()) {
       const start = new Date()
-      logger.verbose(`Evaluating subscription: ${JSON.stringify(subscription.query)}`)
+      logger.verbose(`Evaluating | classname: ${subscription.className} - subscription: ${JSON.stringify(subscription.query)}`)
 
       const isOriginalSubscriptionMatched = this._matchesSubscription(
         originalParseObject,
