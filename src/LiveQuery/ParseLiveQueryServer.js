@@ -284,14 +284,7 @@ class ParseLiveQueryServer {
             .then(
               ([isOriginalMatched, isCurrentMatched]) => {
                 logger.verbose(
-                  'Original %j | Current %j | Match: %s, %s, %s, %s | Query: %s',
-                  originalParseObject,
-                  currentParseObject,
-                  isOriginalSubscriptionMatched,
-                  isCurrentSubscriptionMatched,
-                  isOriginalMatched,
-                  isCurrentMatched,
-                  subscription.hash
+                  `Original ${originalParseObject} | Current ${currentParseObject} | Match: ${isOriginalSubscriptionMatched}, ${isCurrentSubscriptionMatched}, ${isOriginalMatched}, ${isCurrentMatched} | Query: ${subscription.hash}`
                 );
 
                 // Decide event type
