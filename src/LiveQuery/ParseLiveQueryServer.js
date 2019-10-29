@@ -311,6 +311,11 @@ class ParseLiveQueryServer {
                   currentParseObject,
                   originalParseObject
                 );
+
+                const end = new Date()
+                const diff = end.getTime() - start.getTime()
+                logger.verbose(`Evaluated in ${diff} milliseconds | classname: ${subscription.className} - subscription: ${JSON.stringify(subscription.query)}`)
+
               },
               error => {
                 logger.error('Matching ACL error : ', error);
@@ -318,9 +323,6 @@ class ParseLiveQueryServer {
             );
         }
       }
-      const end = new Date()
-      const diff = end.getTime() - start.getTime()
-      logger.verbose(`Finish evaluating subscription in ${diff} milliseconds`)
     }
   }
 
