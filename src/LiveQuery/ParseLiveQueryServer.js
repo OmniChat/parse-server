@@ -334,7 +334,7 @@ class ParseLiveQueryServer {
           return;
         }
       }
-      logger.verbose(`Request: ${request}`);
+      logger.verbose(`Request: ${JSON.stringify(request)}`);
 
       // Check whether this request is a valid request, return error directly if not
       if (
@@ -723,7 +723,7 @@ class ParseLiveQueryServer {
     logger.verbose(
       `Create client ${parseWebsocket.clientId} new subscription: ${request.requestId}`
     );
-    logger.verbose(`Current client number: %${this.clients.size}`);
+    logger.verbose(`Current client number: ${this.clients.size}`);
     runLiveQueryEventHandlers({
       client,
       event: 'subscribe',
