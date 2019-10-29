@@ -302,6 +302,9 @@ class ParseLiveQueryServer {
                 } else {
                   return null;
                 }
+
+                logger.verbose(`Update type: ${type}`);
+
                 const functionName = 'push' + type;
                 client[functionName](
                   requestId,
@@ -720,7 +723,7 @@ class ParseLiveQueryServer {
     logger.verbose(
       `Create client ${parseWebsocket.clientId} new subscription: ${request.requestId}`
     );
-    logger.verbose('Current client number: %d', this.clients.size);
+    logger.verbose(`Current client number: %${this.clients.size}`);
     runLiveQueryEventHandlers({
       client,
       event: 'subscribe',
