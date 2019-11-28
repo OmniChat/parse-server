@@ -194,6 +194,7 @@ function matchesKeyConstraints(object, key, constraints) {
       return equalObjectsGeneric(object[key], constraints, function(obj, ptr) {
         return (
           typeof obj !== 'undefined' &&
+          obj !== null &&
           ptr.className === obj.className &&
           ptr.objectId === obj.objectId
         );
