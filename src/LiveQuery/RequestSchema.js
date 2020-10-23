@@ -130,7 +130,7 @@ const unsubscribe = {
   additionalProperties: false,
 };
 
-const unsubscribe = {
+const ping = {
   title: 'Ping operation schema',
   type: 'object',
   properties: {
