@@ -4,7 +4,7 @@ const general = {
   properties: {
     op: {
       type: 'string',
-      enum: ['connect', 'subscribe', 'unsubscribe', 'update'],
+      enum: ['connect', 'subscribe', 'unsubscribe', 'update', 'ping'],
     },
   },
   required: ['op'],
