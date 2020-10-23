@@ -130,12 +130,23 @@ const unsubscribe = {
   additionalProperties: false,
 };
 
+const unsubscribe = {
+  title: 'Ping operation schema',
+  type: 'object',
+  properties: {
+    op: 'ping',
+  },
+  required: ['op'],
+  additionalProperties: false,
+};
+
 const RequestSchema = {
   general: general,
   connect: connect,
   subscribe: subscribe,
   update: update,
   unsubscribe: unsubscribe,
+  ping: ping,
 };
 
 export default RequestSchema;
