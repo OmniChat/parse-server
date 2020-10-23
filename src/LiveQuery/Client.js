@@ -21,7 +21,7 @@ class Client {
   hasMasterKey: boolean;
   sessionToken: string;
   userId: string;
-  roles: Array < string > ;
+  roles: Array<string>;
   subscriptionInfos: Object;
   pushConnect: Function;
   pushSubscribe: Function;
@@ -52,6 +52,7 @@ class Client {
     this.pushUpdate = this._pushEvent('update');
     this.pushDelete = this._pushEvent('delete');
     this.pushLeave = this._pushEvent('leave');
+    this.pushPong = this._pushEvent('pong');
   }
 
   static pushResponse(parseWebSocket: any, message: Message): void {
@@ -89,7 +90,7 @@ class Client {
   }
 
   _pushEvent(type: string): Function {
-    return function(
+    return function (
       subscriptionId: number,
       parseObjectJSON: any,
       parseOriginalObjectJSON: any

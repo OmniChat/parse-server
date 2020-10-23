@@ -158,8 +158,8 @@ class ParseLiveQueryServer {
         continue;
       }
       for (const [clientId, requestIds] of _.entries(
-          subscription.clientRequestIds
-        )) {
+        subscription.clientRequestIds
+      )) {
         const client = this.clients.get(clientId);
         if (typeof client === 'undefined') {
           continue;
@@ -169,12 +169,12 @@ class ParseLiveQueryServer {
           // Check CLP
           const op = this._getCLPOperation(subscription.query);
           this._matchesCLP(
-              classLevelPermissions,
-              message.currentParseObject,
-              client,
-              requestId,
-              op
-            )
+            classLevelPermissions,
+            message.currentParseObject,
+            client,
+            requestId,
+            op
+          )
             .then(() => {
               // Check ACL
               return this._matchesACL(acl, client, requestId);
@@ -231,8 +231,8 @@ class ParseLiveQueryServer {
         subscription
       );
       for (const [clientId, requestIds] of _.entries(
-          subscription.clientRequestIds
-        )) {
+        subscription.clientRequestIds
+      )) {
         const client = this.clients.get(clientId);
         if (typeof client === 'undefined') {
           continue;
@@ -269,12 +269,12 @@ class ParseLiveQueryServer {
           }
           const op = this._getCLPOperation(subscription.query);
           this._matchesCLP(
-              classLevelPermissions,
-              message.currentParseObject,
-              client,
-              requestId,
-              op
-            )
+            classLevelPermissions,
+            message.currentParseObject,
+            client,
+            requestId,
+            op
+          )
             .then(() => {
               return Promise.all([
                 originalACLCheckingPromise,
@@ -361,6 +361,10 @@ class ParseLiveQueryServer {
         case 'unsubscribe':
           this._handleUnsubscribe(parseWebsocket, request);
           break;
+
+        case 'ping':
+          this._handlePing(parseWebsocket, request);
+          break;
         default:
           Client.pushError(parseWebsocket, 3, 'Get unknown operation');
           logger.error('Get unknown operation', request.op);
@@ -387,8 +391,8 @@ class ParseLiveQueryServer {
 
       // Delete client from subscriptions
       for (const [requestId, subscriptionInfo] of _.entries(
-          client.subscriptionInfos
-        )) {
+        client.subscriptionInfos
+      )) {
         const subscription = subscriptionInfo.subscription;
         subscription.deleteClientSubscription(clientId, requestId);
 
@@ -430,11 +434,11 @@ class ParseLiveQueryServer {
   }
 
   getAuthForSessionToken(
-    sessionToken: ? string
-  ): Promise < {
-    auth: ? Auth,
-    userId: ? string
-  } > {
+    sessionToken: ?string
+  ): Promise<{
+    auth: ?Auth,
+    userId: ?string
+  }> {
     if (!sessionToken) {
       return Promise.resolve({});
     }
@@ -443,9 +447,9 @@ class ParseLiveQueryServer {
       return fromCache;
     }
     const authPromise = getAuthForSessionToken({
-        cacheController: this.cacheController,
-        sessionToken: sessionToken,
-      })
+      cacheController: this.cacheController,
+      sessionToken: sessionToken,
+    })
       .then(auth => {
         return {
           auth,
@@ -473,8 +477,8 @@ class ParseLiveQueryServer {
   }
 
   async _matchesCLP(
-    classLevelPermissions: ? any,
-    object : any,
+    classLevelPermissions: ?any,
+    object: any,
     client: any,
     requestId: number,
     op: string
@@ -577,7 +581,7 @@ class ParseLiveQueryServer {
     acl: any,
     client: any,
     requestId: number
-  ): Promise < boolean > {
+  ): Promise<boolean> {
     // Return true directly if ACL isn't present, ACL is public read, or client has master key
     if (!acl || acl.getPublicReadAccess() || client.hasMasterKey) {
       return true;
@@ -827,6 +831,27 @@ class ParseLiveQueryServer {
     logger.verbose(
       `Delete client: ${parseWebsocket.clientId} | subscription: ${request.requestId}`
     );
+  }
+
+  _handlePing(
+    parseWebsocket: any,
+    request: any
+  ): any {
+    // If we can not find this client, return error to client
+    if (!Object.prototype.hasOwnProperty.call(parseWebsocket, 'clientId')) {
+      Client.pushError(
+        parseWebsocket,
+        2,
+        'Can not find this client, make sure you connect to server before subscribing'
+      );
+      logger.error(
+        'Can not find this client, make sure you connect to server before subscribing'
+      );
+      return;
+    }
+    const client = this.clients.get(parseWebsocket.clientId);
+    client.pushPong(request.requestId);
+
   }
 }
 
